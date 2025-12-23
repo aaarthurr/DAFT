@@ -1,0 +1,3 @@
+google-genai
+prompt_toolkit
+python-dotenv

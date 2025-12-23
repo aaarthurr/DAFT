@@ -1,0 +1,57 @@
+#!/usr/bin/env python3
+
+import os
+import argparse
+import sys
+from pathlib import Path
+
+# External libraries
+from google import genai
+from prompt_toolkit import PromptSession
+from prompt_toolkit.formatted_text import HTML
+from dotenv import load_dotenv
+from commands import *
+
+def configure_env():
+    """
+    Loads environment variables from the standard config location.
+    Priority: ~/.config/daft/.env > Environment Variables
+    """
+    config_path = Path.home() / ".config" / "daft" / ".env"
+    
+    # Load .env if it exists
+    if config_path.exists():
+        load_dotenv(dotenv_path=config_path)
+    
+    # Validation: Ensure API Key exists
+    if not os.getenv("GOOGLE_API_KEY"):
+        print(f"Error: GOOGLE_API_KEY not found.")
+        print(f"Please check your configuration at: {config_path}")
+        sys.exit(1)
+
+def parse_arguments():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-m", "--memory", help="Get memory up to x prompt", default=1, type=int)
+    parser.add_argument("-l", "--list", help="add the list of files to the prompt", action="store_true")
+
+    args, remainder = parser.parse_known_args()
+    prompt = " ".join(remainder).strip()
+    return args, prompt
+
+def main():
+    # 1. Setup Environment
+    configure_env()
+
+    # 2. Parse Arguments
+    args, prompt = parse_arguments()
+
+    if not prompt:
+        print("Welcome to DAFT! Please provide a prompt after the flags.")
+        print("Usage: DAFT [flags] <prompt text>")
+        return
+
+    # 3. Execute Logic (Assuming 'ask' is in commands.py)
+    return ask(prompt, args)
+
+if __name__ == "__main__":
+    main()
