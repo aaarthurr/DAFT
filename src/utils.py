@@ -19,10 +19,7 @@ def get_memory(x_prompts_ago):
     # 1. Trouve le bon fichier log de la session
     log_file_path = os.environ.get("DAFT_HISTORY_FILE")
     if not log_file_path:
-        print("DAFT Error: Logger not active. (DAFT_HISTORY_FILE not set).")
-        print("Active log with daft_start_log")
         return None
-        
     try:
         # 2. Lit et nettoie le fichier
         with open(log_file_path, 'r') as f:

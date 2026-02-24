@@ -38,6 +38,22 @@ def parse_arguments():
     prompt = " ".join(remainder).strip()
     return args, prompt
 
+def check_prompt(prompt):
+    if not prompt:
+        print("DAFT: Please provide a prompt after the flags.")
+        print("Usage: DAFT [flags] <prompt text>")
+        return False
+    if len(prompt) > 150:
+        print("DAFT: Prompt too long (max 150 chars).")
+        return False
+    if (prompt.strip().lower() == "exit") or (prompt.strip().lower() == "quit"):
+        print("DAFT: Goodbye!")
+        sys.exit(0)
+    if (prompt.strip().lower() == "activate") or (prompt.strip().lower() == "start"):
+        print("DAFT: To start DAFT logger, run daft_activate")
+        return False
+    return True
+
 def main():
     # 1. Setup Environment
     configure_env()
@@ -50,6 +66,8 @@ def main():
         print("Usage: DAFT [flags] <prompt text>")
         return
 
+    if not check_prompt(prompt):
+        return
     # 3. Execute Logic (Assuming 'ask' is in commands.py)
     return ask(prompt, args)
 
